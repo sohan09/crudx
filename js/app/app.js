@@ -1,29 +1,40 @@
-angular.module( 'sample', [
+var app = angular.module( 'xstore', [
   'auth0',
-  'ngRoute',
-  'sample.home',
-  'sample.login'
+  'ngRoute'
 ])
 .config( function myAppConfig ( $routeProvider, authProvider, $httpProvider, $locationProvider) {
   $routeProvider
     .when( '/', {
-      controller: 'HomeCtrl',
-      templateUrl: 'home/home.html',
-      pageTitle: 'Homepage',
+      controller: 'ProductCtrl',
+      templateUrl: 'Product/list.scala.html',
+      pageTitle: 'All Products',
+      requiresLogin: true
+    })
+
+    .when( '/product/create/', {
+      controller: 'ProductCtrl',
+      templateUrl: 'Product/create.scala.html',
+      pageTitle: 'Create Product',
+      requiresLogin: true
+    })
+
+    .when( '/product/show/:id', {
+      controller: 'ProductCtrl',
+      templateUrl: 'Product/show.scala.html',
+      pageTitle: 'Product Details',
       requiresLogin: true
     })
 	
     .when( '/login', {
-      controller: 'LoginCtrl',
-      templateUrl: 'login/login.html',
+      templateUrl: 'Application/login.scala.html',
       pageTitle: 'Login'
     });
 
 
   authProvider.init({
-    domain: AUTH0_DOMAIN,
-    clientID: AUTH0_CLIENT_ID,
-    callbackURL: location.href,
+    domain: "boxed.auth0.com",
+    clientID: "rectojRIfjERbByPK2AdO7EHf9ywZt3U",
+    callbackURL: "http://xposeb.herokuapp.com/authenticate",
     loginUrl: '/login'
   });
 
@@ -39,9 +50,11 @@ angular.module( 'sample', [
 })
 .run(function(auth) {
   auth.hookEvents();
-})
+});
 
-.controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
+
+
+app.controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
 
   $scope.$on('$routeChangeSuccess', function(e, nextRoute){
   
@@ -50,7 +63,18 @@ angular.module( 'sample', [
       $scope.pageTitle = nextRoute.$$route.pageTitle;
     }
   });
-})
+});
 
-;
 
+app.controller( 'RootCtrl', function RootCtrl ( $scope, $location ) {
+
+	$scope.user_name = "Sohan Nohemy";
+
+});
+
+
+app.controller( 'ProductCtrl', function ProductCtrl ( $scope, $location ) {
+
+
+
+});
